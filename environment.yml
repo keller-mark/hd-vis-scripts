@@ -1,0 +1,16 @@
+name: hd-vis
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.11
+  - pandas
+  - numpy
+  - jupyterlab
+  - zarr
+  - snakemake
+  - requests
+  - pip
+  - pip:
+    - peewee
