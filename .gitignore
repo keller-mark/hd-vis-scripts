@@ -1,0 +1,12 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+*.csv
+*.png
+*.db
+*.Rproj
+.DS_Store
+.ipynb_checkpoints/
+__pycache__/
+.snakemake/
