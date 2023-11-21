@@ -68,4 +68,4 @@ if __name__ == "__main__":
       line_i += 1
   
   with open(snakemake.output['papers_part'], 'w') as out_f:
-    json.dump({ "line_i": line_i }), out_f
+    json.dump({ "line_i": line_i }, out_f)

@@ -3,8 +3,8 @@ include: "./common.smk"
 from os.path import join
 import os
 
-NUM_PAPERS_FILES = 2 # TODO: set to 30
-NUM_CITATIONS_FILES = 2 # TODO: set to 30
+NUM_PAPERS_FILES = 30
+NUM_CITATIONS_FILES = 30
 
 RELEASE_ID = "2023-11-07"
 
