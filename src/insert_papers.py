@@ -15,7 +15,7 @@ def get_doi(p_info):
   return (None if ('externalids' not in p_info or p_info['externalids'] is None) else p_info['externalids'].get('DOI', None))
 
 if __name__ == "__main__":
-  db = SqliteDatabase(snakemake.input['db'])
+  db = SqliteDatabase(snakemake.input['db'], timeout = 120)
   models = generate_models(db)
 
   globals().update({
