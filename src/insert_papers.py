@@ -7,6 +7,8 @@ import os
 import json
 from peewee import SqliteDatabase, chunked
 from playhouse.reflection import generate_models, print_model, print_table_sql
+import itertools
+
 
 LINE_BATCH_SIZE = 100
 BULK_BATCH_SIZE = 100
@@ -14,9 +16,19 @@ BULK_BATCH_SIZE = 100
 def get_doi(p_info):
   return (None if ('externalids' not in p_info or p_info['externalids'] is None) else p_info['externalids'].get('DOI', None))
 
+def consume(it, n):
+  if n > 0:
+    return next(itertools.islice(it, n-1, n), None)
+
+
 if __name__ == "__main__":
-  db = SqliteDatabase(snakemake.input['db'], timeout = 120)
+  db = SqliteDatabase(snakemake.input['db'], timeout = 1200)
   models = generate_models(db)
+
+  offset = int(snakemake.wildcards['offset'])
+  limit = int(snakemake.params['limit'])
+
+  print(offset, limit)
 
   globals().update({
     "Paper": models['papers'],
@@ -28,6 +40,8 @@ if __name__ == "__main__":
     line_i = 0
     papers = []
     fields = []
+
+    consume(f, offset)
 
     for line in f:
       paper_dict = json.loads(line)
@@ -66,6 +80,9 @@ if __name__ == "__main__":
         papers = []
         fields = []
       line_i += 1
+
+      if line_i >= limit:
+        break
   
   with open(snakemake.output['papers_part'], 'w') as out_f:
     json.dump({ "line_i": line_i }, out_f)
