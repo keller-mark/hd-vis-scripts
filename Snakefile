@@ -3,8 +3,8 @@ include: "./common.smk"
 from os.path import join
 import os
 
-NUM_PAPERS_FILES = 2 # TODO: revert to 30
-NUM_CITATIONS_FILES = 2 # TODO: revert to 30
+NUM_PAPERS_FILES = 30
+NUM_CITATIONS_FILES = 30
 
 RELEASE_ID = "2023-11-07"
 
@@ -50,6 +50,11 @@ rule insert_papers:
     limit=PAPER_LIMIT
   output:
     papers_part=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete.json"),
+  resources:
+    partition="short",
+    runtime=60*4, # 4 hours
+    mem_mb=16_000, # 16 GB
+    cpus_per_task=4
   script:
     join(SRC_DIR, "insert_papers.py")
 
@@ -61,6 +66,11 @@ rule insert_citations:
     limit=CITATION_LIMIT
   output:
     citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete.json"),
+  resources:
+    partition="short",
+    runtime=60*4, # 4 hours
+    mem_mb=16_000, # 16 GB
+    cpus_per_task=4
   script:
     join(SRC_DIR, "insert_citations.py")
 
@@ -70,6 +80,11 @@ rule unzip_s2_papers_bulk_part:
     join(RAW_DIR, "papers", "part{file_i}.jsonl.gz")
   output:
     join(RAW_DIR, "papers", "part{file_i}.jsonl")
+  resources:
+    partition="short",
+    runtime=60*1, # 1 hour
+    mem_mb=16_000, # 16 GB
+    cpus_per_task=4
   shell:
     """
     gunzip -c {input} > {output}
@@ -80,6 +95,11 @@ rule unzip_s2_citations_bulk_part:
     join(RAW_DIR, "citations", "part{file_i}.jsonl.gz")
   output:
     join(RAW_DIR, "citations", "part{file_i}.jsonl")
+  resources:
+    partition="short",
+    runtime=60*1, # 1 hour
+    mem_mb=16_000, # 16 GB
+    cpus_per_task=4
   shell:
     """
     gunzip -c {input} > {output}

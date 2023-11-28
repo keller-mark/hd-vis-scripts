@@ -28,9 +28,17 @@ snakemake -j 1 --touch
 Execute download rules on different nodes:
 
 ```sh
-snakemake --until download_s2_papers_bulk_part --slurm \
-    --default-resources slurm_account=mk596 slurm_partition=short
+snakemake -j 10 --until download_s2_papers_bulk_part --slurm \
+    --default-resources slurm_account=gehlenborg_ng59 slurm_partition=short
+snakemake -j 10 --until download_s2_citations_meta --slurm \
+    --default-resources slurm_account=gehlenborg_ng59 slurm_partition=short
 
+```
+
+Navigate to the data directory:
+
+```sh
+cd /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star
 ```
 
 Resources:
