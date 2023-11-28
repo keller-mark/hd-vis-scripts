@@ -17,6 +17,8 @@ CITATION_LIMIT = 10_000_000
 CITATION_PARTS_PER_FILE = 10
 CITATION_OFFSETS = [i * CITATION_LIMIT for i in range(CITATION_PARTS_PER_FILE)]
 
+envvars:
+  "S2_API_KEY"
 
 rule all:
   input:
@@ -38,6 +40,11 @@ rule all:
 rule create_db:
   output:
     join(PROCESSED_DIR, "s2.db")
+  resources:
+    partition="short",
+    runtime=60*1, # 1 hour
+    mem_mb=4_000, # 4 GB
+    cpus_per_task=4
   script:
     join(SRC_DIR, "create_db.py")
 

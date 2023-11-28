@@ -11,8 +11,16 @@ conda env create -f environment.yml
 ```sh
 conda activate hd-vis
 
+export SLURM_ACCOUNT=$(sshare -u mk596 -U | cut -d ' ' -f 1 | tail -n 1)
 export S2_API_KEY="MY_KEY_HERE"
 snakemake -j 4 --rerun-triggers mtime --keep-incomplete
+```
+
+### Run on cluster
+
+```sh
+snakemake -j 300 --rerun-triggers mtime --keep-incomplete --latency-wait 60 --slurm \
+    --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=30
 ```
 
 ### Troubleshooting
@@ -29,9 +37,9 @@ Execute download rules on different nodes:
 
 ```sh
 snakemake -j 10 --until download_s2_papers_bulk_part --slurm \
-    --default-resources slurm_account=gehlenborg_ng59 slurm_partition=short
-snakemake -j 10 --until download_s2_citations_meta --slurm \
-    --default-resources slurm_account=gehlenborg_ng59 slurm_partition=short
+    --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=30
+snakemake -j 10 --until download_s2_citations_bulk_part --slurm \
+    --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=30
 
 ```
 
@@ -39,6 +47,22 @@ Navigate to the data directory:
 
 ```sh
 cd /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star
+```
+
+List things in the data directory:
+
+```sh
+ls /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/
+ls -lh /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/raw/papers
+ls -lh /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/raw/citations
+```
+
+Check file sizes in the data directory:
+
+```sh
+du -sh /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/raw/papers/*
+du -sh /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/raw/citations/*
+du -sh /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/processed/s2.db
 ```
 
 Resources:
