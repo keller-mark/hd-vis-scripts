@@ -53,6 +53,8 @@ List things in the data directory:
 
 ```sh
 ls /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/
+ls -l /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/processed/papers
+ls -l /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/processed/citations
 ls -lh /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/raw/papers
 ls -lh /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/raw/citations
 ```
