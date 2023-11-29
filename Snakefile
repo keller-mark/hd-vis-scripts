@@ -3,8 +3,8 @@ include: "./common.smk"
 from os.path import join
 import os
 
-NUM_PAPERS_FILES = 30
-NUM_CITATIONS_FILES = 30
+NUM_PAPERS_FILES = 2
+NUM_CITATIONS_FILES = 2
 
 RELEASE_ID = "2023-11-07"
 
@@ -18,7 +18,11 @@ CITATION_PARTS_PER_FILE = 10
 CITATION_OFFSETS = [i * CITATION_LIMIT for i in range(CITATION_PARTS_PER_FILE)]
 
 envvars:
-  "S2_API_KEY"
+  "S2_API_KEY",
+  "HD_VIS_DB_NAME",
+  "HD_VIS_DB_HOST",
+  "HD_VIS_DB_USER",
+  "HD_VIS_DB_PASSWORD"
 
 rule all:
   input:
@@ -39,7 +43,12 @@ rule all:
 # Create the SQLite DB
 rule create_db:
   output:
-    join(PROCESSED_DIR, "s2.db")
+    join(PROCESSED_DIR, "db_creation.json")
+  params:
+    db_name=os.environ["HD_VIS_DB_NAME"],
+    db_host=os.environ["HD_VIS_DB_HOST"],
+    db_user=os.environ["HD_VIS_DB_USER"],
+    db_password=os.environ["HD_VIS_DB_PASSWORD"]
   resources:
     partition="short",
     runtime=60*1, # 1 hour
@@ -54,7 +63,11 @@ rule insert_papers:
     db=join(PROCESSED_DIR, "s2.db"),
     papers_part=join(RAW_DIR, "papers", "part{file_i}.jsonl"),
   params:
-    limit=PAPER_LIMIT
+    limit=PAPER_LIMIT,
+    db_name=os.environ["HD_VIS_DB_NAME"],
+    db_host=os.environ["HD_VIS_DB_HOST"],
+    db_user=os.environ["HD_VIS_DB_USER"],
+    db_password=os.environ["HD_VIS_DB_PASSWORD"]
   output:
     papers_part=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete.json"),
   resources:
@@ -70,7 +83,11 @@ rule insert_citations:
     db=join(PROCESSED_DIR, "s2.db"),
     citations_part=join(RAW_DIR, "citations", "part{file_i}.jsonl"),
   params:
-    limit=CITATION_LIMIT
+    limit=CITATION_LIMIT,
+    db_name=os.environ["HD_VIS_DB_NAME"],
+    db_host=os.environ["HD_VIS_DB_HOST"],
+    db_user=os.environ["HD_VIS_DB_USER"],
+    db_password=os.environ["HD_VIS_DB_PASSWORD"]
   output:
     citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete.json"),
   resources:

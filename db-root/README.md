@@ -52,11 +52,13 @@ psql_db.get_tables()
 
 #### On other node:
 
-Get server node hostname:
+Get server node hostname while on server node:
 
 ```sh
 echo $(hostname)
 ```
+
+On client node, connect (replace host and password params):
 
 ```python
 import os

@@ -2,28 +2,26 @@ import pandas as pd
 import numpy as np
 from os.path import join, basename, dirname
 import requests
-import sqlite3
 import os
 import json
-from peewee import SqliteDatabase, chunked
-from playhouse.reflection import generate_models, print_model, print_table_sql
-import itertools
+from peewee import PostgresqlDatabase, chunked
 
-
-LINE_BATCH_SIZE = 100
-BULK_BATCH_SIZE = 100
-
-def get_doi(p_info):
-  return (None if ('externalids' not in p_info or p_info['externalids'] is None) else p_info['externalids'].get('DOI', None))
-
-def consume(it, n):
-  if n > 0:
-    return next(itertools.islice(it, n-1, n), None)
-
+from mod.utils import (
+  get_doi,
+  consume,
+  LINE_BATCH_SIZE,
+  BULK_BATCH_SIZE
+)
+from mod.models import get_models
 
 if __name__ == "__main__":
-  db = SqliteDatabase(snakemake.input['db'], timeout = 1200)
-  models = generate_models(db)
+  db = PostgresqlDatabase(
+    snakemake.params['db_name'],
+    host=snakemake.params['db_host'],
+    user=snakemake.params['db_user'],
+    password=snakemake.params['db_password']
+  )
+  models = get_models(db)
 
   offset = int(snakemake.wildcards['offset'])
   limit = int(snakemake.params['limit'])
