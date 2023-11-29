@@ -4,7 +4,7 @@ from os.path import join, basename, dirname
 import requests
 import os
 import json
-from peewee import PostgresqlDatabase, chunked, IntegrityError
+from peewee import *
 
 from mod.utils import (
   get_doi,
@@ -55,7 +55,7 @@ if __name__ == "__main__":
         try:
           with db.atomic():
             Citation.bulk_create(citations, batch_size=BULK_BATCH_SIZE)
-        except IntegrityError as e:
+        except (DataError, IntegrityError) as e:
           print(e)
           error_lines.append(line_i)
         citations = []

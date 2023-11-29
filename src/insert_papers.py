@@ -4,7 +4,7 @@ from os.path import join, basename, dirname
 import requests
 import os
 import json
-from peewee import PostgresqlDatabase, chunked, IntegrityError
+from peewee import *
 
 from mod.utils import (
   get_doi,
@@ -77,7 +77,7 @@ if __name__ == "__main__":
             Paper.bulk_create(papers, batch_size=BULK_BATCH_SIZE)
           with db.atomic():
             PaperToField.bulk_create(fields, batch_size=BULK_BATCH_SIZE)
-        except IntegrityError as e:
+        except (DataError, IntegrityError) as e:
           print(e)
           error_lines.append(line_i)
         papers = []
