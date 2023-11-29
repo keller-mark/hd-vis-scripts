@@ -4,7 +4,7 @@ from os.path import join, basename, dirname
 import requests
 import os
 import json
-from peewee import PostgresqlDatabase, chunked
+from peewee import PostgresqlDatabase, chunked, IntegrityError
 
 from mod.utils import (
   get_doi,
@@ -36,6 +36,7 @@ if __name__ == "__main__":
 
   with open(snakemake.input['papers_part'], 'r') as f:
     line_i = 0
+    error_lines = []
     papers = []
     fields = []
 
@@ -71,10 +72,14 @@ if __name__ == "__main__":
           
       papers.append(paper_obj)
       if line_i % LINE_BATCH_SIZE == 0:
-        with db.atomic():
-          Paper.bulk_create(papers, batch_size=BULK_BATCH_SIZE)
-        with db.atomic():
-          PaperToField.bulk_create(fields, batch_size=BULK_BATCH_SIZE)
+        try:
+          with db.atomic():
+            Paper.bulk_create(papers, batch_size=BULK_BATCH_SIZE)
+          with db.atomic():
+            PaperToField.bulk_create(fields, batch_size=BULK_BATCH_SIZE)
+        except IntegrityError as e:
+          print(e)
+          error_lines.append(line_i)
         papers = []
         fields = []
       line_i += 1
@@ -83,4 +88,4 @@ if __name__ == "__main__":
         break
   
   with open(snakemake.output['papers_part'], 'w') as out_f:
-    json.dump({ "line_i": line_i }, out_f)
+    json.dump({ "line_i": line_i, "errors": error_lines }, out_f)

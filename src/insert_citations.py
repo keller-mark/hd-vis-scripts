@@ -4,7 +4,7 @@ from os.path import join, basename, dirname
 import requests
 import os
 import json
-from peewee import PostgresqlDatabase, chunked
+from peewee import PostgresqlDatabase, chunked, IntegrityError
 
 from mod.utils import (
   get_doi,
@@ -36,6 +36,7 @@ if __name__ == "__main__":
 
   with open(snakemake.input['citations_part'], 'r') as f:
     line_i = 0
+    error_lines = []
     citations = []
 
     consume(f, offset)
@@ -51,8 +52,12 @@ if __name__ == "__main__":
 
       citations.append(citation_obj)
       if line_i % LINE_BATCH_SIZE == 0:
-        with db.atomic():
-          Citation.bulk_create(citations, batch_size=BULK_BATCH_SIZE)
+        try:
+          with db.atomic():
+            Citation.bulk_create(citations, batch_size=BULK_BATCH_SIZE)
+        except IntegrityError as e:
+          print(e)
+          error_lines.append(line_i)
         citations = []
       line_i += 1
     
@@ -60,4 +65,4 @@ if __name__ == "__main__":
         break
 
   with open(snakemake.output['citations_part'], 'w') as out_f:
-    json.dump({ "line_i": line_i }, out_f)
+    json.dump({ "line_i": line_i, "errors": error_lines }, out_f)

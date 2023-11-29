@@ -11,7 +11,7 @@ dependencies:
   - zarr
   - snakemake
   - requests
+  - psycopg2
   - pip
   - pip:
     - peewee
-    - psycopg2

@@ -16,7 +16,7 @@ if __name__ == "__main__":
     user=snakemake.params['db_user'],
     password=snakemake.params['db_password']
   )
-  models = get_models(db)
+  models = get_models(db, force=True)
 
   with open(snakemake.output[0], 'w') as out_f:
     json.dump({ "models": list(models.keys()) }, out_f)
