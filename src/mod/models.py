@@ -44,7 +44,7 @@ def get_models(db, force=False):
   existing_tables = db.get_tables()
   if len(existing_tables) == 0 or force:
     if len(existing_tables) > 0 and force:
-      db.drop_tables(existing_tables)
+      db.drop_tables([Paper, PaperToField, Citation])
     db.create_tables([Paper, PaperToField, Citation])
 
   return ({
