@@ -26,9 +26,6 @@ envvars:
 
 rule all:
   input:
-    join(PROCESSED_DIR, "s2.db"),
-    join(RAW_DIR, "papers_meta.json"),
-    join(RAW_DIR, "citations_meta.json"),
     expand(
       join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete.json"),
       file_i=range(NUM_PAPERS_FILES),
@@ -43,7 +40,7 @@ rule all:
 # Create the SQLite DB
 rule create_db:
   output:
-    join(PROCESSED_DIR, "db_creation.json")
+    join(PROCESSED_DIR, "db.json")
   params:
     db_name=os.environ["HD_VIS_DB_NAME"],
     db_host=os.environ["HD_VIS_DB_HOST"],
@@ -60,7 +57,7 @@ rule create_db:
 # Insert papers into the SQLite DB
 rule insert_papers:
   input:
-    db=join(PROCESSED_DIR, "s2.db"),
+    db=join(PROCESSED_DIR, "db.json"),
     papers_part=join(RAW_DIR, "papers", "part{file_i}.jsonl"),
   params:
     limit=PAPER_LIMIT,
@@ -80,7 +77,7 @@ rule insert_papers:
 
 rule insert_citations:
   input:
-    db=join(PROCESSED_DIR, "s2.db"),
+    db=join(PROCESSED_DIR, "db.json"),
     citations_part=join(RAW_DIR, "citations", "part{file_i}.jsonl"),
   params:
     limit=CITATION_LIMIT,

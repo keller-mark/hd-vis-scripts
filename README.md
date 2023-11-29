@@ -6,12 +6,34 @@
 conda env create -f environment.yml
 ```
 
+Also see [DB setup](./db-root/README.md)
+
 ### Run
 
+#### 1. Start postgres server in long-running interactive job
+
+```
+srun -p interactive --pty -t 8:00:00 -n 4 --mem 16G bash
+cd ~/lab
+module load postgresql
+pg_ctl -D $(pwd)/hd-vis-db -l logfile start
+hostname
+```
+
+Copy the hostname
+
+#### 2. Start client jobs from login node
+
 ```sh
+cd ~/research/hd-vis-scripts
+
 conda activate hd-vis
 
 export SLURM_ACCOUNT=$(sshare -u mk596 -U | cut -d ' ' -f 1 | tail -n 1)
+export HD_VIS_DB_NAME=mk596
+export HD_VIS_DB_USER=mk596
+export HD_VIS_DB_HOST="HOST_HERE"
+export HD_VIS_DB_PASSWORD="MY_PASSWORD_HERE"
 export S2_API_KEY="MY_KEY_HERE"
 snakemake -j 4 --rerun-triggers mtime --keep-incomplete
 ```
@@ -19,7 +41,7 @@ snakemake -j 4 --rerun-triggers mtime --keep-incomplete
 ### Run on cluster
 
 ```sh
-snakemake -j 300 --rerun-triggers mtime --keep-incomplete --latency-wait 60 --slurm \
+snakemake -j 20 --rerun-triggers mtime --keep-incomplete --latency-wait 60 --slurm \
     --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=30
 ```
 
