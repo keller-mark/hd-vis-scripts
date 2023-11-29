@@ -41,7 +41,7 @@ snakemake -j 4 --rerun-triggers mtime --keep-incomplete
 ### Run on cluster
 
 ```sh
-snakemake -j 20 --rerun-triggers mtime --keep-incomplete --latency-wait 60 --slurm \
+snakemake -j 100 --rerun-triggers mtime --keep-incomplete --latency-wait 30 --slurm \
     --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=30
 ```
 

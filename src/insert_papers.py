@@ -78,6 +78,8 @@ if __name__ == "__main__":
           with db.atomic():
             PaperToField.bulk_create(fields, batch_size=BULK_BATCH_SIZE)
         except (DataError, IntegrityError) as e:
+          # peewee.IntegrityError: null values where non-null expected
+          # peewee.DataError: value too long for type character varying(255)
           print(e)
           error_lines.append(line_i)
         papers = []
