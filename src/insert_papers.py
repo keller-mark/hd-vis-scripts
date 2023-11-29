@@ -36,6 +36,7 @@ if __name__ == "__main__":
 
   with open(snakemake.input['papers_part'], 'r') as f:
     line_i = 0
+    prev_batch_line_i = 0
     error_lines = []
     papers = []
     fields = []
@@ -81,9 +82,10 @@ if __name__ == "__main__":
           # peewee.IntegrityError: null values where non-null expected
           # peewee.DataError: value too long for type character varying(255)
           print(e)
-          error_lines.append(line_i)
+          error_lines += list(range(offset + prev_batch_line_i, offset + line_i + 1))
         papers = []
         fields = []
+        prev_batch_line_i = line_i + 1
       line_i += 1
 
       if line_i >= limit:

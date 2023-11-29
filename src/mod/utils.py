@@ -1,8 +1,8 @@
 import itertools
 
 
-LINE_BATCH_SIZE = 100
-BULK_BATCH_SIZE = 100
+LINE_BATCH_SIZE = 1000
+BULK_BATCH_SIZE = 1000
 
 def get_doi(p_info):
   return (None if ('externalids' not in p_info or p_info['externalids'] is None) else p_info['externalids'].get('DOI', None))

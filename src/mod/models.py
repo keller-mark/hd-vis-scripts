@@ -6,7 +6,7 @@ def get_models(db, force=False):
   class Paper(Model):
     corpus_id = CharField(unique=True, primary_key=True)
     doi = CharField(null=True)
-    title = CharField(null=True)
+    title = TextField(null=True)
     year = IntegerField(null=True)
     citation_count = IntegerField(null=True)
     venue = CharField(null=True)

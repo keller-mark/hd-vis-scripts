@@ -36,6 +36,7 @@ if __name__ == "__main__":
 
   with open(snakemake.input['citations_part'], 'r') as f:
     line_i = 0
+    prev_batch_line_i = 0
     error_lines = []
     citations = []
 
@@ -57,8 +58,9 @@ if __name__ == "__main__":
             Citation.bulk_create(citations, batch_size=BULK_BATCH_SIZE)
         except (DataError, IntegrityError) as e:
           print(e)
-          error_lines.append(line_i)
+          error_lines += list(range(offset + prev_batch_line_i, offset + line_i + 1))
         citations = []
+        prev_batch_line_i = line_i + 1
       line_i += 1
     
       if line_i >= limit:

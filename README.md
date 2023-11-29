@@ -13,7 +13,7 @@ Also see [DB setup](./db-root/README.md)
 #### 1. Start postgres server in long-running interactive job
 
 ```
-srun -p interactive --pty -t 8:00:00 -n 4 --mem 16G bash
+srun -p medium --pty -t 2-12:00 -n 4 --mem 16G bash
 cd ~/lab
 module load postgresql
 pg_ctl -D $(pwd)/hd-vis-db -l logfile start
