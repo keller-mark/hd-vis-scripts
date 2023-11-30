@@ -82,7 +82,7 @@ if __name__ == "__main__":
           # peewee.IntegrityError: null values where non-null expected
           # peewee.DataError: value too long for type character varying(255)
           print(e)
-          error_lines += list(range(offset + prev_batch_line_i, offset + line_i + 1))
+          error_lines.append(offset + prev_batch_line_i)
         papers = []
         fields = []
         prev_batch_line_i = line_i + 1

@@ -58,7 +58,7 @@ if __name__ == "__main__":
             Citation.bulk_create(citations, batch_size=BULK_BATCH_SIZE)
         except (DataError, IntegrityError) as e:
           print(e)
-          error_lines += list(range(offset + prev_batch_line_i, offset + line_i + 1))
+          error_lines.append(offset + prev_batch_line_i)
         citations = []
         prev_batch_line_i = line_i + 1
       line_i += 1

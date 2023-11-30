@@ -13,8 +13,8 @@ RELEASE_ID = "2023-11-07"
 PAPER_LIMIT = 1_000_000
 PAPER_PARTS_PER_FILE = 10
 PAPER_OFFSETS = [i * PAPER_LIMIT for i in range(PAPER_PARTS_PER_FILE)]
-CITATION_LIMIT = 5_000_000
-CITATION_PARTS_PER_FILE = 20
+CITATION_LIMIT = 2_500_000
+CITATION_PARTS_PER_FILE = 40
 CITATION_OFFSETS = [i * CITATION_LIMIT for i in range(CITATION_PARTS_PER_FILE)]
 
 envvars:
@@ -70,7 +70,7 @@ rule insert_papers:
   resources:
     partition="short",
     runtime=60*8, # 8 hours
-    mem_mb=4_000, # 16 GB
+    mem_mb=4_000, # 4 GB
     cpus_per_task=4
   script:
     join(SRC_DIR, "insert_papers.py")
@@ -89,8 +89,8 @@ rule insert_citations:
     citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete.json"),
   resources:
     partition="short",
-    runtime=60*8, # 8 hours
-    mem_mb=4_000, # 16 GB
+    runtime=60*12, # 12 hours
+    mem_mb=4_000, # 4 GB
     cpus_per_task=4
   script:
     join(SRC_DIR, "insert_citations.py")
