@@ -92,3 +92,4 @@ du -sh /n/data1/hms/dbmi/gehlenborg/lab/hd-vis-star/processed/s2.db
 Resources:
 - https://stackoverflow.com/questions/80801/how-can-i-merge-many-sqlite-databases
 - https://hcc.unl.edu/docs/applications/app_specific/running_postgres/
+- https://stackoverflow.com/questions/1237725/copying-postgresql-database-to-another-server
