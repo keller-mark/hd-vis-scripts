@@ -88,8 +88,8 @@ rule insert_citations:
   output:
     citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete.json"),
   resources:
-    partition="medium",
-    runtime=60*16, # 16 hours
+    partition="short",
+    runtime=60*12, # 12 hours
     mem_mb=2_000, # 2 GB
     cpus_per_task=1
   script:
