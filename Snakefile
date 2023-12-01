@@ -70,8 +70,8 @@ rule insert_papers:
   resources:
     partition="short",
     runtime=60*12, # 12 hours
-    mem_mb=4_000, # 4 GB
-    cpus_per_task=4
+    mem_mb=2_000, # 2 GB
+    cpus_per_task=1
   script:
     join(SRC_DIR, "insert_papers.py")
 
@@ -90,8 +90,8 @@ rule insert_citations:
   resources:
     partition="medium",
     runtime=60*16, # 16 hours
-    mem_mb=4_000, # 4 GB
-    cpus_per_task=4
+    mem_mb=2_000, # 2 GB
+    cpus_per_task=1
   script:
     join(SRC_DIR, "insert_citations.py")
 
