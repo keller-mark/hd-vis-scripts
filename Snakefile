@@ -69,7 +69,7 @@ rule insert_papers:
     papers_part=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete.json"),
   resources:
     partition="medium",
-    runtime=60*24, # 12 hours
+    runtime="1-00:00", # 12 hours
     mem_mb=2_000, # 2 GB
     cpus_per_task=1
   script:
@@ -89,7 +89,7 @@ rule insert_citations:
     citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete.json"),
   resources:
     partition="medium",
-    runtime=60*24, # 12 hours
+    runtime="1-00:00", # 12 hours
     mem_mb=2_000, # 2 GB
     cpus_per_task=1
   script:
