@@ -70,7 +70,6 @@ rule insert_papers:
   resources:
     partition="medium",
     runtime=60*24, # 1 hour
-    slurm_extra="-t 1-00:00",
     mem_mb=2_000, # 2 GB
     cpus_per_task=1
   script:
@@ -91,7 +90,6 @@ rule insert_citations:
   resources:
     partition="medium",
     runtime=60*24, # 1 hour
-    slurm_extra="-t 1-00:00",
     mem_mb=2_000, # 2 GB
     cpus_per_task=1
   script:
