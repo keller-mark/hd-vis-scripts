@@ -25,6 +25,12 @@ if __name__ == "__main__":
   )
   models = get_models(db)
 
+  globals().update({
+    "Paper": models['papers'],
+    "PaperToField": models['paper_to_field'],
+    "Citation": models['citations'],
+  })
+
   # Set is_preprint field
   query = Paper
     .update(is_preprint=True)
