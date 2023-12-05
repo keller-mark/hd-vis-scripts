@@ -23,7 +23,7 @@ if __name__ == "__main__":
     user=snakemake.params['db_user'],
     password=snakemake.params['db_password']
   )
-  models = get_models(db, force=True)
+  models = get_models(db)
 
   # Set is_preprint field
   query = Paper
