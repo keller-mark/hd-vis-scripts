@@ -17,6 +17,12 @@ if __name__ == "__main__":
   )
   models = get_models(db)
 
+  globals().update({
+    "Paper": models['papers'],
+    "PaperToField": models['paper_to_field'],
+    "Citation": models['citations'],
+  })
+
   # Create a table with the columns:
   # Citation count | Number of papers with citation count | Year | Field
   rows = PaperToField
