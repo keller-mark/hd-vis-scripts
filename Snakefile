@@ -47,7 +47,7 @@ rule create_db:
     db_user=os.environ["HD_VIS_DB_USER"],
     db_password=os.environ["HD_VIS_DB_PASSWORD"]
   resources:
-    partition="short",
+    slurm_partition="short",
     runtime=60*1, # 1 hour
     mem_mb=4_000, # 4 GB
     cpus_per_task=4
@@ -68,8 +68,8 @@ rule insert_papers:
   output:
     papers_part=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete.json"),
   resources:
-    partition="medium",
-    runtime=60*24, # 1 hour
+    slurm_partition="medium",
+    runtime=60*24, # 1 day
     mem_mb=2_000, # 2 GB
     cpus_per_task=1
   script:
@@ -88,8 +88,8 @@ rule insert_citations:
   output:
     citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete.json"),
   resources:
-    partition="medium",
-    runtime=60*24, # 1 hour
+    slurm_partition="medium",
+    runtime=60*24, # 1 day
     mem_mb=2_000, # 2 GB
     cpus_per_task=1
   script:
@@ -102,7 +102,7 @@ rule unzip_s2_papers_bulk_part:
   output:
     join(RAW_DIR, "papers", "part{file_i}.jsonl")
   resources:
-    partition="short",
+    slurm_partition="short",
     runtime=60*1, # 1 hour
     mem_mb=16_000, # 16 GB
     cpus_per_task=4
@@ -117,7 +117,7 @@ rule unzip_s2_citations_bulk_part:
   output:
     join(RAW_DIR, "citations", "part{file_i}.jsonl")
   resources:
-    partition="short",
+    slurm_partition="short",
     runtime=60*1, # 1 hour
     mem_mb=16_000, # 16 GB
     cpus_per_task=4
@@ -135,7 +135,7 @@ rule download_s2_papers_bulk_part:
   params:
     s2_api_key=os.environ["S2_API_KEY"]
   resources:
-    partition="short",
+    slurm_partition="short",
     runtime=60*8, # 8 hours
     mem_mb=16_000, # 16 GB
     cpus_per_task=4
@@ -152,7 +152,7 @@ rule download_s2_citations_bulk_part:
   params:
     s2_api_key=os.environ["S2_API_KEY"]
   resources:
-    partition="short",
+    slurm_partition="short",
     runtime=60*8, # 8 hours
     mem_mb=16_000, # 16 GB
     cpus_per_task=4
