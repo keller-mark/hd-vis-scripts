@@ -33,7 +33,7 @@ if __name__ == "__main__":
   # Citation count | Number of papers with citation count | Year | Field
   rows = (
     PaperToField
-      .select(ptf_q.c.ptf_field, ptf_q.c.ptf_source, ptf_q.c.ptf_corpus_id, Paper.is_preprint, Paper.citation_count, Paper.year, fn.COUNT(ptf_q.c.ptf_corpus_id).alias('paper_count'))
+      .select(ptf_q.c.ptf_field, ptf_q.c.ptf_source, Paper.is_preprint, Paper.citation_count, Paper.year, fn.COUNT(ptf_q.c.ptf_corpus_id).alias('paper_count'))
       .from_(ptf_q)
       .where(Paper.is_preprint == False, Paper.year >= 2013)
       .join(Paper, on=(ptf_q.c.ptf_corpus_id == Paper.corpus_id))
