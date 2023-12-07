@@ -31,9 +31,11 @@ if __name__ == "__main__":
   })
 
   # Set is_preprint field
-  query = Paper
-    .update(is_preprint=True)
-    .where(Paper.venue.in_(PREPRINT_VENUES))
+  query = (
+    Paper
+      .update(is_preprint=True)
+      .where(Paper.venue.in_(PREPRINT_VENUES))
+  )
   query.execute()
 
   print("Successfully updated preprint status.")
