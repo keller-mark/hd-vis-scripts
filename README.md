@@ -35,14 +35,27 @@ export HD_VIS_DB_USER=mk596
 export HD_VIS_DB_HOST="HOST_HERE"
 export HD_VIS_DB_PASSWORD="MY_PASSWORD_HERE"
 export S2_API_KEY="MY_KEY_HERE"
-snakemake -j 4 --rerun-triggers mtime --keep-incomplete
+
+snakemake -j 50 --rerun-triggers mtime --keep-incomplete --keep-going --latency-wait 30 --slurm \
+    --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=30
 ```
 
-### Run on cluster
+#### 3. Run queries against running postgres server
 
 ```sh
-snakemake -j 100 --rerun-triggers mtime --keep-incomplete --keep-going --latency-wait 30 --slurm \
-    --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=30
+srun -p interactive --pty -t 8:00:00 -n 4 --mem 32G bash
+
+cd ~/research/hd-vis-scripts
+conda activate hd-vis
+
+export HD_VIS_DB_NAME=mk596
+export HD_VIS_DB_USER=mk596
+export HD_VIS_DB_HOST="HOST_HERE"
+export HD_VIS_DB_PASSWORD="MY_PASSWORD_HERE"
+
+cd src
+
+python q01_update_preprints.py
 ```
 
 ### Troubleshooting

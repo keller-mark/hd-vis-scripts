@@ -36,4 +36,6 @@ if __name__ == "__main__":
     .where(Paper.venue.in_(PREPRINT_VENUES))
   query.execute()
 
+  print("Successfully updated preprint status.")
+
   
