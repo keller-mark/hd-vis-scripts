@@ -10,10 +10,10 @@ from mod.models import get_models
 
 if __name__ == "__main__":
   db = PostgresqlDatabase(
-    snakemake.params['db_name'],
-    host=snakemake.params['db_host'],
-    user=snakemake.params['db_user'],
-    password=snakemake.params['db_password']
+    os.environ['HD_VIS_DB_NAME'],
+    host=os.environ['HD_VIS_DB_HOST'],
+    user=os.environ['HD_VIS_DB_USER'],
+    password=os.environ['HD_VIS_DB_PASSWORD']
   )
   models = get_models(db)
 
