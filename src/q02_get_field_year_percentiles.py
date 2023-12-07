@@ -23,17 +23,25 @@ if __name__ == "__main__":
     "Citation": models['citations'],
   })
 
+  ptf_q = (
+    PaperToField
+      .select(PaperToField.corpus_id.alias('ptf_corpus_id'), PaperToField.field.alias('ptf_field'), PaperToField.source.alias('ptf_source'))
+      .distinct()
+  )
+
   # Create a table with the columns:
   # Citation count | Number of papers with citation count | Year | Field
   rows = PaperToField
-    .select(PaperToField.field, PaperToField.corpus_id, Paper.is_preprint, Paper.citation_count, Paper.year, fn.COUNT(PaperToField.corpus_id).alias('paper_count'))
+    .select(ptf_q.c.ptf_field, ptf_q.c.ptf_source, ptf_q.c.ptf_corpus_id, Paper.is_preprint, Paper.citation_count, Paper.year, fn.COUNT(ptf_q.c.ptf_corpus_id).alias('paper_count'))
+    .from_(ptf_q)
     .where(Paper.is_preprint == False, Paper.year >= 2013)
-    .join(Paper, on=(PaperToField.corpus_id == Paper.corpus_id))
-    .group_by(PaperToField.field, Paper.year, Paper.citation_count)
+    .join(Paper, on=(ptf_q.c.ptf_corpus_id == Paper.corpus_id))
+    .group_by(ptf_q.c.ptf_field, ptf_q.c.ptf_source, Paper.year, Paper.citation_count)
   
   df = pd.DataFrame(data=[
     {
-      "field": row.field,
+      "field": row.ptf_field,
+      "source": row.ptf_source,
       "year": row.paper.year,
       "citation_count": row.paper.citation_count,
       "paper_count": row.paper_count
@@ -44,4 +52,4 @@ if __name__ == "__main__":
   # Calculate cumulative frequencies in percentages (Table 3 of Bornmann and Williams Scientometrics 2020)
   # - CP-IN is the percentage of papers with citation count at or below X.
   # - CP-EX is the percentage of papers with citation count below X.
-  df.to_csv(snakemake.output[0])
+  df.to_csv('q02_get_field_year_percentiles.csv')
