@@ -44,8 +44,8 @@ if __name__ == "__main__":
     {
       "field": row.ptf_field,
       "source": row.ptf_source,
-      "year": row.paper.year,
-      "citation_count": row.paper.citation_count,
+      "year": row.year,
+      "citation_count": row.citation_count,
       "paper_count": row.paper_count
     } for row in rows
   ])
