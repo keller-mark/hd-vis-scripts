@@ -37,6 +37,40 @@ rule all:
       offset=CITATION_OFFSETS,
     )
 
+rule repair_papers:
+  input:
+    expand(
+      join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete_repaired.json"),
+      file_i=range(NUM_PAPERS_FILES),
+      offset=PAPER_OFFSETS,
+    )
+
+rule repair_citations:
+  input:
+    expand(
+      join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete_repaired.json"),
+      file_i=range(NUM_PAPERS_FILES),
+      offset=PAPER_OFFSETS,
+    )
+
+rule repair_paper_part:
+  input:
+    papers_part=join(RAW_DIR, "papers", "part{file_i}.jsonl"),
+    papers_errors=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete.json")
+  output:
+    papers_part=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete_repaired.json")
+  script:
+    join(SRC_DIR, "repair_papers.py")
+
+rule repair_citations_part:
+  input:
+    citations_part=join(RAW_DIR, "citations", "part{file_i}.jsonl"),
+    citations_errors=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete.json")
+  output:
+    citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete_repaired.json")
+  script:
+    join(SRC_DIR, "repair_citations.py")
+
 # Create the SQLite DB
 rule create_db:
   output:

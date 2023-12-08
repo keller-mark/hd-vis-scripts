@@ -40,6 +40,17 @@ snakemake -j 50 --rerun-triggers mtime --keep-incomplete --keep-going --latency-
     --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=30
 ```
 
+#### 2.1. Repair errors
+
+```sh
+cd ~/research/hd-vis-scripts
+
+conda activate hd-vis
+
+snakemake repair_papers -j 50 --rerun-triggers mtime --keep-incomplete --keep-going --latency-wait 30 --slurm \
+    --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=180
+```
+
 #### 3. Run queries against running postgres server
 
 ```sh

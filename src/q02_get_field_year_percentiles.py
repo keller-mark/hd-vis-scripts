@@ -23,29 +23,22 @@ if __name__ == "__main__":
     "Citation": models['citations'],
   })
 
-  ptf_q = (
-    PaperToField
-      .select(PaperToField.corpus_id.alias('ptf_corpus_id'), PaperToField.field.alias('ptf_field'), PaperToField.source.alias('ptf_source'))
-      .distinct()
-  )
-
   # Create a table with the columns:
   # Citation count | Number of papers with citation count | Year | Field
   rows = (
     PaperToField
-      .select(ptf_q.c.ptf_field, ptf_q.c.ptf_source, Paper.citation_count, Paper.year, fn.COUNT(ptf_q.c.ptf_corpus_id).alias('paper_count'))
-      .from_(ptf_q)
+      .select(PaperToField.field, PaperToField.source, Paper.citation_count, Paper.year, fn.COUNT(PaperToField.corpus_id).alias('paper_count'))
       .where(Paper.is_preprint == False, Paper.year >= 2013)
-      .join(Paper, on=(ptf_q.c.ptf_corpus_id == Paper.corpus_id))
-      .group_by(ptf_q.c.ptf_field, ptf_q.c.ptf_source, Paper.year, Paper.citation_count)
+      .join(Paper, on=(PaperToField.corpus_id == Paper.corpus_id))
+      .group_by(PaperToField.field, PaperToField.source, Paper.year, Paper.citation_count)
   )
     
   df = pd.DataFrame(data=[
     {
-      "field": row.ptf_field,
-      "source": row.ptf_source,
-      "year": row.year,
-      "citation_count": row.citation_count,
+      "field": row.field,
+      "source": row.source,
+      "year": row.paper.year,
+      "citation_count": row.paper.citation_count,
       "paper_count": row.paper_count
     } for row in rows
   ])
