@@ -24,9 +24,6 @@ if __name__ == "__main__":
   models = get_models(db)
 
   offset = int(snakemake.wildcards['offset'])
-  limit = int(snakemake.params['limit'])
-
-  print(offset, limit)
 
   globals().update({
     "Paper": models['papers'],

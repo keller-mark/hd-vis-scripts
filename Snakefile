@@ -57,6 +57,11 @@ rule repair_paper_part:
   input:
     papers_part=join(RAW_DIR, "papers", "part{file_i}.jsonl"),
     papers_errors=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete.json")
+  params:
+    db_name=os.environ["HD_VIS_DB_NAME"],
+    db_host=os.environ["HD_VIS_DB_HOST"],
+    db_user=os.environ["HD_VIS_DB_USER"],
+    db_password=os.environ["HD_VIS_DB_PASSWORD"]
   output:
     papers_part=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete_repaired.json")
   script:
@@ -66,6 +71,11 @@ rule repair_citations_part:
   input:
     citations_part=join(RAW_DIR, "citations", "part{file_i}.jsonl"),
     citations_errors=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete.json")
+  params:
+    db_name=os.environ["HD_VIS_DB_NAME"],
+    db_host=os.environ["HD_VIS_DB_HOST"],
+    db_user=os.environ["HD_VIS_DB_USER"],
+    db_password=os.environ["HD_VIS_DB_PASSWORD"]
   output:
     citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete_repaired.json")
   script:

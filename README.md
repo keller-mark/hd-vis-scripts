@@ -47,6 +47,13 @@ cd ~/research/hd-vis-scripts
 
 conda activate hd-vis
 
+export SLURM_ACCOUNT=$(sshare -u mk596 -U | cut -d ' ' -f 1 | tail -n 1)
+export HD_VIS_DB_NAME=mk596
+export HD_VIS_DB_USER=mk596
+export HD_VIS_DB_HOST="HOST_HERE"
+export HD_VIS_DB_PASSWORD="MY_PASSWORD_HERE"
+export S2_API_KEY="MY_KEY_HERE"
+
 snakemake repair_papers -j 50 --rerun-triggers mtime --keep-incomplete --keep-going --latency-wait 30 --slurm \
     --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=180
 ```
