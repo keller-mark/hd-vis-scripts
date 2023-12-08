@@ -86,7 +86,6 @@ if __name__ == "__main__":
             except (DataError, IntegrityError) as e:
               # peewee.IntegrityError: null values where non-null expected
               # peewee.DataError: value too long for type character varying(255)
-              print(e)
               if error_batch_line_i + i not in more_error_lines:
                 more_error_lines.append(error_batch_line_i + i)
         i += 1

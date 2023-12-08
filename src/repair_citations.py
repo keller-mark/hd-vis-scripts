@@ -60,7 +60,6 @@ if __name__ == "__main__":
           with db.atomic():
             citation_obj.save()
         except (DataError, IntegrityError) as e:
-          print(e)
           more_error_lines.append(error_batch_line_i + i)
       
         i += 1
