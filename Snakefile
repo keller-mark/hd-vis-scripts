@@ -64,6 +64,11 @@ rule repair_paper_part:
     db_password=os.environ["HD_VIS_DB_PASSWORD"]
   output:
     papers_part=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete_repaired.json")
+  resources:
+    slurm_partition="short",
+    runtime=60*6, # 6 day
+    mem_mb=2_000, # 2 GB
+    cpus_per_task=1
   script:
     join(SRC_DIR, "repair_papers.py")
 
@@ -78,6 +83,11 @@ rule repair_citations_part:
     db_password=os.environ["HD_VIS_DB_PASSWORD"]
   output:
     citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete_repaired.json")
+  resources:
+    slurm_partition="short",
+    runtime=60*6, # 6 hours
+    mem_mb=2_000, # 2 GB
+    cpus_per_task=1
   script:
     join(SRC_DIR, "repair_citations.py")
 
