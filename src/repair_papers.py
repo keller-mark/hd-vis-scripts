@@ -46,7 +46,8 @@ if __name__ == "__main__":
       consume(f, to_consume)
       n_consumed += to_consume
 
-      for i in range(LINE_BATCH_SIZE):
+      i = 0
+      for line in f:
         paper_dict = json.loads(line)
         paper_obj = Paper(
           corpus_id=paper_dict['corpusid'],
@@ -75,20 +76,22 @@ if __name__ == "__main__":
     
         if paper_dict['s2fieldsofstudy'] is not None:
           for field in paper_dict['s2fieldsofstudy']:
-            ptf_obj = PaperToField(
-              corpus_id=paper_dict['corpusid'],
-              field=field['category'],
-              source=field['source']
-            )
             try:
               with db.atomic():
-                ptf_obj.save()
+                ptf_obj, created = PaperToField.get_or_create(
+                  corpus_id=paper_dict['corpusid'],
+                  field=field['category'],
+                  source=field['source']
+                )
             except (DataError, IntegrityError) as e:
               # peewee.IntegrityError: null values where non-null expected
               # peewee.DataError: value too long for type character varying(255)
               print(e)
               if error_batch_line_i + i not in more_error_lines:
                 more_error_lines.append(error_batch_line_i + i)
+        i += 1
+        if i >= LINE_BATCH_SIZE:
+          break
   
   with open(snakemake.output['papers_part'], 'w') as out_f:
     json.dump({ "more_errors": more_error_lines }, out_f)

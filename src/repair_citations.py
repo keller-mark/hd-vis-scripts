@@ -47,7 +47,8 @@ if __name__ == "__main__":
       consume(f, to_consume)
       n_consumed += to_consume
 
-      for i in range(LINE_BATCH_SIZE):
+      i = 0
+      for line in f:
         citation_dict = json.loads(line)
         citation_obj = Citation(
           citation_id=citation_dict['citationid'],
@@ -61,6 +62,10 @@ if __name__ == "__main__":
         except (DataError, IntegrityError) as e:
           print(e)
           more_error_lines.append(error_batch_line_i + i)
+      
+        i += 1
+        if i >= LINE_BATCH_SIZE:
+          break
 
   with open(snakemake.output['citations_part'], 'w') as out_f:
     json.dump({ "more_errors": more_error_lines }, out_f)
