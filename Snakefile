@@ -65,8 +65,8 @@ rule repair_paper_part:
   output:
     papers_part=join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete_repaired.json")
   resources:
-    slurm_partition="short",
-    runtime=60*6, # 6 day
+    slurm_partition="medium",
+    runtime=60*24, # 24 hours
     mem_mb=2_000, # 2 GB
     cpus_per_task=1
   script:
@@ -84,8 +84,8 @@ rule repair_citations_part:
   output:
     citations_part=join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete_repaired.json")
   resources:
-    slurm_partition="short",
-    runtime=60*6, # 6 hours
+    slurm_partition="medium",
+    runtime=60*24, # 24 hours
     mem_mb=2_000, # 2 GB
     cpus_per_task=1
   script:

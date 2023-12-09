@@ -71,18 +71,18 @@ if __name__ == "__main__":
         except (DataError, IntegrityError) as e:
           # peewee.IntegrityError: null values where non-null expected
           # peewee.DataError: value too long for type character varying(255)
-          print(e)
           more_error_lines.append(error_batch_line_i + i)
     
         if paper_dict['s2fieldsofstudy'] is not None:
           for field in paper_dict['s2fieldsofstudy']:
+            ptf_obj = PaperToField(
+              corpus_id=paper_dict['corpusid'],
+              field=field['category'],
+              source=field['source']
+            )
             try:
               with db.atomic():
-                ptf_obj, created = PaperToField.get_or_create(
-                  corpus_id=paper_dict['corpusid'],
-                  field=field['category'],
-                  source=field['source']
-                )
+                ptf_obj.save()
             except (DataError, IntegrityError) as e:
               # peewee.IntegrityError: null values where non-null expected
               # peewee.DataError: value too long for type character varying(255)

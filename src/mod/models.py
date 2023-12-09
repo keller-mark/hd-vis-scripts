@@ -29,6 +29,7 @@ def get_models(db, force=False):
   
     class Meta:
       database = db
+      primary_key=CompositeKey('corpus_id', 'field', 'source')
   
   class Citation(Model):
     citation_id = CharField(unique=True, primary_key=True)
