@@ -82,7 +82,7 @@ if __name__ == "__main__":
             )
             try:
               with db.atomic():
-                ptf_obj.save()
+                ptf_obj.save(force_insert=True)
             except (DataError, IntegrityError) as e:
               # peewee.IntegrityError: null values where non-null expected
               # peewee.DataError: value too long for type character varying(255)
