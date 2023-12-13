@@ -37,6 +37,19 @@ rule all:
       offset=CITATION_OFFSETS,
     )
 
+rule repair_all:
+  input:
+    expand(
+      join(PROCESSED_DIR, "papers", "part{file_i}_offset{offset}_complete_repaired.json"),
+      file_i=range(NUM_PAPERS_FILES),
+      offset=PAPER_OFFSETS,
+    ),
+    expand(
+      join(PROCESSED_DIR, "citations", "part{file_i}_offset{offset}_complete_repaired.json"),
+      file_i=range(NUM_PAPERS_FILES),
+      offset=PAPER_OFFSETS,
+    )
+
 rule repair_papers:
   input:
     expand(
