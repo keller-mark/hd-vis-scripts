@@ -54,9 +54,7 @@ export HD_VIS_DB_HOST="HOST_HERE"
 export HD_VIS_DB_PASSWORD="MY_PASSWORD_HERE"
 export S2_API_KEY="MY_KEY_HERE"
 
-snakemake repair_papers -j 50 --rerun-triggers mtime --keep-incomplete --keep-going --latency-wait 30 --slurm \
-    --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=180
-snakemake repair_citations -j 50 --rerun-triggers mtime --keep-incomplete --keep-going --latency-wait 30 --slurm \
+snakemake repair_all -j 50 --rerun-triggers mtime --keep-incomplete --keep-going --latency-wait 30 --slurm \
     --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=180
 ```
 
