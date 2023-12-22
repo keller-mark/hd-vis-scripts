@@ -59,6 +59,6 @@ if __name__ == "__main__":
       "corpus_id": row.paper.corpus_id,
       "doi": row.paper.doi,
       "cited_corpus_id": get_cited_corpus_id(row)
-    } for row in rows_list
+    } for row in rows
   ])
   df.to_csv('q06_get_l1_papers_fields.csv')
