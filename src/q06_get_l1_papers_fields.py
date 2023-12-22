@@ -52,9 +52,7 @@ if __name__ == "__main__":
       "venue": row.paper.venue,
       "corpus_id": row.paper.corpus_id,
       "doi": row.paper.doi,
-      "cited_corpus_id": row.citation.cited_corpus_id
+      "cited_corpus_id": row.paper.citation.cited_corpus_id
     } for row in rows
   ])
   df.to_csv('q06_get_l1_papers_fields.csv')
-
-
