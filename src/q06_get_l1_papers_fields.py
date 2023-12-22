@@ -37,7 +37,7 @@ if __name__ == "__main__":
       .select(Citation.cited_corpus_id, Citation.citing_corpus_id, Paper.citation_count, Paper.year, Paper.title, Paper.venue, Paper.doi, PaperToField.field, PaperToField.source)
       .where(Citation.cited_corpus_id.in_(dr_corpus_ids), Paper.is_preprint == False, Paper.year >= 2013)
       .join(Paper, on=(Paper.corpus_id == Citation.citing_corpus_id))
-      .join(PaperToField, on=(Paper.corpus_id == PaperToField.citing_corpus_id))
+      .join(PaperToField, on=(Paper.corpus_id == PaperToField.corpus_id))
   )
 
   df = pd.DataFrame(data=[
