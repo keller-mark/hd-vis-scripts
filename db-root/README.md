@@ -55,7 +55,7 @@ psql_db.get_tables()
 Get server node hostname while on server node:
 
 ```sh
-echo $(hostname)
+hostname
 ```
 
 On client node, connect (replace host and password params):
