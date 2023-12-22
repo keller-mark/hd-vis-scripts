@@ -8,11 +8,6 @@ from peewee import *
 
 from mod.models import get_models
 
-def get_cited_corpus_id(row):
-  try:
-    return row.paper.citation.cited_corpus_id
-  except AttributeError:
-    return None
 
 if __name__ == "__main__":
   db = PostgresqlDatabase(
