@@ -26,7 +26,7 @@ if __name__ == "__main__":
   dr_df = pd.read_csv(join("..", "dr_algorithms_with_ids.csv"))
   dr_corpus_ids = dr_df['ss_corpus_id'].astype(str).tolist()
 
-  # Set is_preprint field
+  # Set is_method_primary value.
   query = (
     Paper
       .update(is_method_primary=True)
@@ -35,3 +35,13 @@ if __name__ == "__main__":
   query.execute()
 
   print("Successfully updated method status for primary methods.")
+
+  # Fix field casing.
+  query = (
+    PaperToField
+      .update(field="Agricultural and Food Sciences")
+      .where(PaperToField.field == "Agricultural And Food Sciences")
+  )
+  query.execute()
+
+  print("Successfully cleaned field names.")

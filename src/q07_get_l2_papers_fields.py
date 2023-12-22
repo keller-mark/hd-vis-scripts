@@ -54,4 +54,4 @@ if __name__ == "__main__":
       "cited_corpus_id": row.cited_corpus_id
     } for row in rows
   ])
-  df.to_csv('q07_get_l2_papers_fields_v2.csv')
+  df.to_csv('q07_get_l2_papers_fields.csv')

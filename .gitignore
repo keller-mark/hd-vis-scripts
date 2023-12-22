@@ -11,3 +11,7 @@ __pycache__/
 .snakemake/
 data/
 s2-sample/
+node_modules/
+package.json
+package-lock.json
+*.log
