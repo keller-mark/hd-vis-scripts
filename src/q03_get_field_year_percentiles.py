@@ -47,4 +47,4 @@ if __name__ == "__main__":
   # Calculate cumulative frequencies in percentages (Table 3 of Bornmann and Williams Scientometrics 2020)
   # - CP-IN is the percentage of papers with citation count at or below X.
   # - CP-EX is the percentage of papers with citation count below X.
-  df.to_csv('q02_get_field_year_percentiles.csv')
+  df.to_csv('q03_get_field_year_percentiles.csv')
