@@ -8,6 +8,12 @@ from peewee import *
 
 from mod.models import get_models
 
+def get_cited_corpus_id(row):
+  try:
+    return row.paper.citation.cited_corpus_id
+  except AttributeError:
+    return None
+
 if __name__ == "__main__":
   db = PostgresqlDatabase(
     os.environ['HD_VIS_DB_NAME'],
@@ -52,7 +58,7 @@ if __name__ == "__main__":
       "venue": row.paper.venue,
       "corpus_id": row.paper.corpus_id,
       "doi": row.paper.doi,
-      "cited_corpus_id": row.paper.citation.cited_corpus_id
-    } for row in rows
+      "cited_corpus_id": get_cited_corpus_id(row)
+    } for row in rows_list
   ])
   df.to_csv('q06_get_l1_papers_fields.csv')
