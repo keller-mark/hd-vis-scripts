@@ -42,8 +42,8 @@ if __name__ == "__main__":
 
   df = pd.DataFrame(data=[
     {
-      "field": row.paper.paper_to_field.field,
-      "source": row.paper.paper_to_field.source,
+      "field": row.paper.papertofield.field,
+      "source": row.paper.papertofield.source,
       "year": row.paper.year,
       "citation_count": row.paper.citation_count,
       "title": row.paper.title,
