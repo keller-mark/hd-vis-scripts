@@ -1,12 +1,24 @@
 # hd-vis-scripts
 
+This repository contains scripts for bibliometric analysis of literature which cites dimensionality reduction method papers.
+These scripts download the entire Semantic Scholar Academic Graph (S2AG) and insert all paper and citation records into a PostgreSQL database.
+Jupyter notebooks plot the results of queries against this database.
+The scripts to download Semantic Scholar bulk files and insert records into the SQL database (everything upstream of querying the database) are general and could be reused for other bibliometric analyses.
+
+
 ## Setup
 
 ```sh
 conda env create -f environment.yml
 ```
 
-Note: to install `altair_saver`, you will need to have NodeJS (tested with v20) and NPM (v8 or earlier) installed.
+Also see [DB setup](./db-root/README.md)
+
+Request a semantic scholar API key from https://www.semanticscholar.org/product/api#api-key
+
+### Troubleshooting
+
+To install `altair_saver`, you will need to have NodeJS (tested with v20) and NPM (v8 or earlier) installed.
 
 If the installation fails, run the NPM install command manually:
 
@@ -16,13 +28,9 @@ npm install vega-lite vega-cli canvas
 
 On macOS, the [canvas](https://github.com/Automattic/node-canvas#installation) package may require some Homebrew dependencies.
 
-Also see [DB setup](./db-root/README.md)
+## Run
 
-Request a semantic scholar API key from https://www.semanticscholar.org/product/api#api-key
-
-### Run
-
-#### 1. Start postgres server in long-running interactive job
+### 1. Start postgres server in long-running interactive job
 
 Adjust the time (`-t`) that will be requested for the `srun` command based on the intended client jobs that will be run against the server.
 
@@ -36,7 +44,7 @@ hostname
 
 Copy the hostname
 
-#### 2. Start client jobs from login node
+### 2. Start client jobs from login node
 
 This took approximately one week to run (with 50-100 jobs running simultaneously as specified with `-j`).
 
@@ -91,7 +99,7 @@ du -sh ~/lab/hd-vis-db
 # 142G	/home/mk596/lab/hd-vis-db
 ```
 
-#### 3. Run queries against running postgres server
+### 3. Run queries against running postgres server
 
 These queries take approximately 3 hours to run.
 
@@ -120,7 +128,7 @@ python q08_summary_stats.py
 
 The resulting extracted CSV files are approximately 2 GB total.
 
-### Troubleshooting
+### More troubleshooting
 
 If presigned URLs in `data/raw/citations_meta.json` and `data/raw/papers_meta.json` have expired, then:
 
