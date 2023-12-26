@@ -64,6 +64,8 @@ The `.jsonl.gz` files are 220 GB total. After unzipping the `.jsonl` files are 8
 
 #### 2.1. Repair errors
 
+The insertion 
+
 This took approximately one week to run (with 50-100 jobs running simultaneously as specified with `-j`).
 
 ```sh
@@ -113,6 +115,7 @@ python q04_get_citing_methods_l1.py
 python q05_get_citing_methods_l2.py
 python q06_get_l1_papers_fields.py
 python q07_get_l1_papers_fields.py
+python q08_summary_stats.py
 ```
 
 The resulting extracted CSV files are approximately 2 GB total.

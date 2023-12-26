@@ -15,6 +15,7 @@ dependencies:
   - altair==4.2.2
   - altair_saver==0.5.0
   - selenium==4.2.0
+  - mpltern==1.0.2
   - pip
   - pip:
     - peewee
