@@ -66,13 +66,18 @@ snakemake -j 50 --rerun-triggers mtime --keep-incomplete --keep-going --latency-
     --default-resources slurm_account=$SLURM_ACCOUNT slurm_partition=short runtime=30
 ```
 
-The `.jsonl.gz` files are 220 GB total. After unzipping the `.jsonl` files are 840 GB total.
+The `.jsonl.gz` files are 220 GB total. After unzipping, the `.jsonl` files are 840 GB total.
 
 
 
 #### 2.1. Repair errors
 
-The insertion 
+The insertion scripts use transactions with batches of 1,000 records at a time.
+The transaction will fail if one of those 1,000 record insertions encounters an error (e.g., if a venue name is longer than the `CharField` allows).
+The insertion scripts store the indices of failed batches.
+The repair scripts try to insert individual records within those failed batches.
+This is slower, as we now perform a transaction for every record (as opposed to every 1,000 records), but now we are only iterating over records within failed batches.
+
 
 This took approximately one week to run (with 50-100 jobs running simultaneously as specified with `-j`).
 
