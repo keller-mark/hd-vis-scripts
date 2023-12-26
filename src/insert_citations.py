@@ -2,21 +2,31 @@ import pandas as pd
 import numpy as np
 from os.path import join, basename, dirname
 import requests
-import sqlite3
 import os
 import json
-from peewee import SqliteDatabase, chunked
-from playhouse.reflection import generate_models, print_model, print_table_sql
+from peewee import *
 
-LINE_BATCH_SIZE = 100
-BULK_BATCH_SIZE = 100
-
-def get_doi(p_info):
-  return (None if ('externalids' not in p_info or p_info['externalids'] is None) else p_info['externalids'].get('DOI', None))
+from mod.utils import (
+  get_doi,
+  consume,
+  LINE_BATCH_SIZE,
+  BULK_BATCH_SIZE
+)
+from mod.models import get_models
 
 if __name__ == "__main__":
-  db = SqliteDatabase(snakemake.input['db'], timeout = 120)
-  models = generate_models(db)
+  db = PostgresqlDatabase(
+    snakemake.params['db_name'],
+    host=snakemake.params['db_host'],
+    user=snakemake.params['db_user'],
+    password=snakemake.params['db_password']
+  )
+  models = get_models(db)
+
+  offset = int(snakemake.wildcards['offset'])
+  limit = int(snakemake.params['limit'])
+
+  print(offset, limit)
 
   globals().update({
     "Paper": models['papers'],
@@ -26,7 +36,11 @@ if __name__ == "__main__":
 
   with open(snakemake.input['citations_part'], 'r') as f:
     line_i = 0
+    prev_batch_line_i = 0
+    error_lines = []
     citations = []
+
+    consume(f, offset)
     
     for line in f:
       citation_dict = json.loads(line)
@@ -39,10 +53,18 @@ if __name__ == "__main__":
 
       citations.append(citation_obj)
       if line_i % LINE_BATCH_SIZE == 0:
-        with db.atomic():
-          Citation.bulk_create(citations, batch_size=BULK_BATCH_SIZE)
+        try:
+          with db.atomic():
+            Citation.bulk_create(citations, batch_size=BULK_BATCH_SIZE)
+        except (DataError, IntegrityError) as e:
+          print(e)
+          error_lines.append(offset + prev_batch_line_i)
         citations = []
+        prev_batch_line_i = line_i + 1
       line_i += 1
+    
+      if line_i >= limit:
+        break
 
   with open(snakemake.output['citations_part'], 'w') as out_f:
-    json.dump({ "line_i": line_i }, out_f)
+    json.dump({ "line_i": line_i, "errors": error_lines }, out_f)
