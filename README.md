@@ -5,7 +5,8 @@ These scripts download the entire Semantic Scholar Academic Graph (S2AG) and ins
 Jupyter notebooks plot the results of queries against this database.
 The scripts to download Semantic Scholar bulk files and insert records into the SQL database (everything upstream of querying the database) are general and could be reused for other bibliometric analyses.
 
-The database insertion scripts are quite dumb (100 Python `for` loops running in parallel SLURM jobs, iterating over almost 1 TB of `.jsonl` files, inserting in batches of 1,000 records), but the single Postgres server node cannot really handle more simultaneous clients than this anyway.
+The database insertion scripts are quite dumb/inefficient (100 Python `for` loops running in parallel SLURM jobs, iterating over almost 1 TB of `.jsonl` files, inserting in batches of 1,000 records), but the single Postgres server node cannot really handle more simultaneous clients than this anyway.
+Primary key constraints in each model prevent insertion of duplicate records during a repair step.
 
 ## Setup
 
