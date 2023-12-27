@@ -19,3 +19,4 @@ dependencies:
   - pip
   - pip:
     - peewee
+    - pySankey==0.0.1
